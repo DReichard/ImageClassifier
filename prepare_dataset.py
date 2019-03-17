@@ -2,6 +2,10 @@
 import os
 import image_parsing
 import numpy as np
+from keras.utils import to_categorical
+from sklearn.model_selection import train_test_split
+
+random_seed = 42
 
 
 def randomize(dataset, labels):
@@ -39,3 +43,14 @@ def get_dataset(clean_path, affected_path, limit):
     print("Labels shape: " + str(labels.shape))
     images, labels = randomize(images, labels)
     return images, labels
+
+
+def split_dataset(images, labels):
+    images_train, images_test, labels_train, labels_test = \
+        train_test_split(images, labels, test_size=0.33, random_state=random_seed)
+    images_train = images_train.reshape((images_train.shape[0], images_train.shape[1] * images_train.shape[2]))
+    images_test = images_test.reshape((images_test.shape[0], images_test.shape[1] * images_test.shape[2]))
+    labels_train = to_categorical(labels_train)
+    labels_test = to_categorical(labels_test)
+    return images_train, images_test, labels_train, labels_test
+
