@@ -5,9 +5,7 @@ import numpy as np
 
 
 def randomize(dataset, labels):
-    # Generate the permutation index array.
     permutation = np.random.permutation(dataset.shape[0])
-    # Shuffle the arrays by giving the permutation in the square brackets.
     shuffled_dataset = dataset[permutation]
     shuffled_labels = labels[permutation]
     return shuffled_dataset, shuffled_labels
