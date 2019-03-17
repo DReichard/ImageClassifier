@@ -32,15 +32,15 @@ def import_folder(clean_folder, limit):
 
 def get_dataset(clean_path, affected_path, limit):
     clean_images = import_folder(clean_path, limit)
-    print(clean_images.shape)
+    # print(clean_images.shape)
     clean_labels = np.full(clean_images.shape[0], 0, dtype=int)
     affected_images = import_folder(affected_path, limit)
-    print(affected_images.shape)
+    # print(affected_images.shape)
     affected_labels = np.full(affected_images.shape[0], 1, dtype=int)
     images = np.concatenate((clean_images, affected_images))
-    print("Dataset shape: " + str(images.shape))
+    # print("Dataset shape: " + str(images.shape))
     labels = np.concatenate((clean_labels, affected_labels))
-    print("Labels shape: " + str(labels.shape))
+    # print("Labels shape: " + str(labels.shape))
     images, labels = randomize(images, labels)
     return images, labels
 
@@ -48,8 +48,11 @@ def get_dataset(clean_path, affected_path, limit):
 def split_dataset(images, labels):
     images_train, images_test, labels_train, labels_test = \
         train_test_split(images, labels, test_size=0.33, random_state=random_seed)
-    images_train = images_train.reshape((images_train.shape[0], images_train.shape[1] * images_train.shape[2]))
-    images_test = images_test.reshape((images_test.shape[0], images_test.shape[1] * images_test.shape[2]))
+    print('DEBUG1:', images_train.shape)
+    images_train = images_train.reshape((images_train.shape[0], images_train.shape[1], images_train.shape[2], 1))
+    print('DEBUG2:', images_train.shape)
+
+    images_test = images_test.reshape((images_test.shape[0], images_test.shape[1], images_test.shape[2], 1))
     labels_train = to_categorical(labels_train)
     labels_test = to_categorical(labels_test)
     return images_train, images_test, labels_train, labels_test
