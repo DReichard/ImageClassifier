@@ -13,6 +13,12 @@ def get_image(image_path):
     return image_array
 
 
+def get_image_grescale(image_path):
+    img = Image.open(image_path)
+    image_array = np.array(img)
+    return image_array[:, :, 0]
+
+
 def split_blocks(channel, nrows, ncols):
     h, w = channel.shape
     return (channel.reshape(h // nrows, nrows, -1, ncols)

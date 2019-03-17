@@ -3,20 +3,29 @@ import image_parsing
 import os
 
 
-def prepare_dataset(input_folder, output_folder):
+def import_dataset(clean_folder, affected_folder):
+    file_list = os.listdir(clean_folder)
+    for count, file in enumerate(file_list):
+        image_parsing.get_image_grescale(os.path.join(clean_folder, file))
+
+
+def cut_images(input_folder, output_folder):
     try:
         shutil.rmtree(output_folder)
     except FileNotFoundError:
         print('Cleaning failed, output path does not exist')
     os.mkdir(output_folder)
     file_list = os.listdir(input_folder)
-    for file in file_list:
+    for count, file in enumerate(file_list):
         if file.endswith(".jpg") | file.endswith(".jpeg"):
             blocks = image_parsing.split_image_to_blocks(os.path.join(input_folder, file))
             for index, block in enumerate(blocks):
                 output_path = os.path.join(output_folder, file.split('.')[0] + '_' + str(index) + '.jpg')
                 image_parsing.save_array_as_greyscale_img(block, output_path)
+        if count % 5000 == 0:
+            print("Files processed: " + str(count))
 
 
-prepare_dataset('D:\\nir_datasets\\jpg\\input', 'D:\\nir_datasets\\jpg\\dataset')
-
+print('Image cutting started')
+cut_images('D:\\nir_datasets\\jpg\\clean_raw_images_input2', 'D:\\nir_datasets\\jpg\\clean\\clean_cut_images2')
+print('Done')
