@@ -16,7 +16,7 @@ def get_image(image_path):
 def get_image_grescale(image_path):
     img = Image.open(image_path)
     image_array = np.array(img)
-    return image_array[:, :, 0]
+    return image_array[:, :]
 
 
 def split_blocks(channel, nrows, ncols):

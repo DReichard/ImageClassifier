@@ -1,12 +1,6 @@
 import shutil
-import image_parsing
 import os
-
-
-def import_dataset(clean_folder, affected_folder):
-    file_list = os.listdir(clean_folder)
-    for count, file in enumerate(file_list):
-        image_parsing.get_image_grescale(os.path.join(clean_folder, file))
+import image_parsing
 
 
 def cut_images(input_folder, output_folder):

@@ -1,42 +1,10 @@
-
-from keras import models
-from keras import layers
+import prepare_dataset
 
 
-def add_layer_type1(size):
-    # TODO conv
-    print("first layer conv")
-    # TODO batch normalization
-    print("first layer batch normalization")
-    # TODO ReLU
-    print("first layer ReLU")
+clean_path = 'D:\\nir_datasets\\jpg\\clean\\clean_cut_images1'
+affected_path = 'D:\\nir_datasets\\jpg\\affected\\sorted\\vsl_lsb_5kb\\2019-03-17-15-04-40-207\\input000';
+limit = 5000
 
+images, labels = prepare_dataset.get_dataset(clean_path, affected_path, limit)
 
-def add_layer_type2(size):
-    # TODO conv
-    print("first layer conv")
-    # TODO batch normalization
-    print("first layer batch normalization")
-    # TODO ReLU
-    print("first layer ReLU")
-
-
-def add_layer_type3(size):
-    # TODO conv
-    print("first layer conv")
-    # TODO batch normalization
-    print("first layer batch normalization")
-    # TODO ReLU
-    print("first layer ReLU")
-
-
-def add_layer_type4(size):
-    # TODO conv
-    print("first layer conv")
-    # TODO batch normalization
-    print("first layer batch normalization")
-    # TODO ReLU
-    print("first layer ReLU")
-
-
-network = models.Sequential()
+print(images.shape)
