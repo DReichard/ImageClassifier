@@ -56,17 +56,3 @@ def split_dataset(images, labels):
     labels_train = to_categorical(labels_train)
     labels_test = to_categorical(labels_test)
     return images_train, images_test, labels_train, labels_test
-
-
-def split_dataset2(images, labels):
-    train_images = images
-    train_labels = labels
-    test_images = images[0:299]
-    test_labels = labels[300-499]
-    train_images = train_images.reshape((train_images.shape[0], train_images.shape[1], train_images.shape[2], 1))
-    train_images = train_images.astype('float32') / 255
-    test_images = test_images.reshape((test_images.shape[0], test_images.shape[1], test_images.shape[2], 1))
-    test_images = test_images.astype('float32') / 255
-    train_labels = to_categorical(train_labels)
-    test_labels = to_categorical(test_labels)
-    return train_images, test_images, train_labels, test_labels

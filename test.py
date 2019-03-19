@@ -26,7 +26,6 @@ dataset_limit = 1000
 
 # images, labels = prepare_dataset.get_dataset(clean_path, affected_path, dataset_limit)
 
-
 (train_images, train_labels), (test_images, test_labels) = mnist.load_data()
 images = np.concatenate((train_images, test_images))
 labels = np.concatenate((train_labels, test_labels))
