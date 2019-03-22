@@ -11,8 +11,8 @@ def cut_images(input_folder, output_folder):
     os.mkdir(output_folder)
     file_list = os.listdir(input_folder)
     for count, file in enumerate(file_list):
-        if file.endswith(".jpg") | file.endswith(".jpeg"):
-            blocks = image_parsing.split_image_to_blocks(os.path.join(input_folder, file))
+        if file.endswith(".jpg") | file.endswith(".jpeg")| file.endswith('.png'):
+            blocks = image_parsing.split_image_to_blocks(os.path.join(input_folder, file), 256)
             for index, block in enumerate(blocks):
                 output_path = os.path.join(output_folder, file.split('.')[0] + '_' + str(index) + '.jpg')
                 image_parsing.save_array_as_greyscale_img(block, output_path)
@@ -21,5 +21,5 @@ def cut_images(input_folder, output_folder):
 
 
 print('Image cutting started')
-cut_images('D:\\nir_datasets\\jpg\\clean_raw_images_input2', 'D:\\nir_datasets\\jpg\\clean\\clean_cut_images2')
+cut_images('D:\\nir_datasets\\jpg\\my_memes_raw', 'D:\\nir_datasets\\jpg\\clean\\memes_cut')
 print('Done')
