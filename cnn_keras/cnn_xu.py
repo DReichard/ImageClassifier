@@ -11,6 +11,8 @@ Network presented in the paper:
 
 import sys
 import glob
+
+import onnxmltools
 from scipy import misc, ndimage, signal
 import numpy
 import random
@@ -28,6 +30,19 @@ from keras import optimizers
 from keras.utils import np_utils
 from keras.layers.normalization import BatchNormalization
 from keras import backend as K
+
+# magic
+import tensorflow as tf
+from keras.backend.tensorflow_backend import set_session
+
+config = tf.ConfigProto(
+    gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
+    # device_count = {'GPU': 1}
+)
+config.gpu_options.allow_growth = True
+session = tf.Session(config=config)
+set_session(session)
+
 
 # Crop squared blocks of the image with size:
 n=256
@@ -158,7 +173,7 @@ model.add(Activation('softmax'))
 import rdn_assembly
 # model = rdn_assembly.get_network()
 
-model.compile(loss='binary_crossentropy', optimizer="adam", metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer="adamax", metrics=['accuracy'])
 
 print("Compiled")
 
@@ -166,10 +181,11 @@ ep = 10
 i = 0
 while True:
     i += ep
-    model.fit(X, Xt, batch_size=80, epochs=ep, validation_data=(Y, Yt), shuffle=True)
+    model.fit(X, Xt, batch_size=50, epochs=ep, validation_data=(Y, Yt), shuffle=True)
     print("****", i, "epochs done")
     open("model_xu_"+str(i)+".json", 'w').write(model.to_json())
     model.save_weights("model_xu_"+str(i)+".h5")
-
-
-
+    model.save("model_xu_"+str(i)+"full.h5")
+    onnx_model = onnxmltools.convert_keras(model, target_opset=7)
+    onnxmltools.utils.save_text(onnx_model, 'model_xu_10_onnx.json')
+    onnxmltools.utils.save_model(onnx_model, 'model_xu_10_onnx.onnx')
