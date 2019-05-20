@@ -1,3 +1,7 @@
+scipy
+scikit-image
+matplotlib
+cv2
 scikit-learn
 keras
 

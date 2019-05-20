@@ -14,7 +14,7 @@ def first_type_layer(input_value, size):
 
 def second_type_layer(input_value, size):
     first_sublayer = first_type_layer(input_value, size)
-    convolution_layer = Conv2D(size, kernel_size=(1, 1), padding='same', kernel_initializer='random_normal', data_format="channels_first")(first_sublayer)
+    convolution_layer = Conv2D(size, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first")(first_sublayer)
     batch_normalized_layer = BatchNormalization()(convolution_layer)
     add_layer = Add()([batch_normalized_layer, input_value])
     return add_layer
@@ -33,18 +33,18 @@ def third_type_layer(input_value, size):
 
 def fourth_type_layer(input_value, size):
     first_sublayer = first_type_layer(input_value, size)
-    convolution_layer = Conv2D(size, data_format="channels_first", kernel_size=(1, 1), padding='same', kernel_initializer='random_normal')(first_sublayer)
+    convolution_layer = Conv2D(size, data_format="channels_first", kernel_size=(3, 3), padding='same', kernel_initializer='random_normal')(first_sublayer)
     batch_normalized_layer = BatchNormalization()(convolution_layer)
     global_average = GlobalAveragePooling2D(data_format="channels_first")(batch_normalized_layer)
     return global_average
 
 
 def get_network():
-    # input_value = Input(shape=(256, 256, 1))
     input_value = Input(shape=(1, 256, 256))
+    # input_value = Input(shape=(1, 256, 256))
     # x = first_type_layer(input_value, 64)
-    x = first_type_layer(input_value, 16)
-    # x = first_type_layer(x, 16)
+    x = first_type_layer(input_value, 64)
+    x = first_type_layer(x, 16)
 
     x = second_type_layer(x, 16)
     x = second_type_layer(x, 16)
@@ -68,6 +68,127 @@ def get_network():
     # opt = Adamax(lr=0.1, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0)
     network.compile(optimizer=opt,
                     loss='categorical_crossentropy',
+                    metrics=['accuracy'])
+    print('Network Compiled')
+    return network
+
+
+def get_network2():
+    input_value = Input(shape=(1, 128, 128))
+
+    convolution_layer = Conv2D(64, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal',data_format="channels_first", input_shape=(1, 256, 256))(input_value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = ReLU()(batch_normalized_layer)
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal',data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = ReLU()(batch_normalized_layer)
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = Add()([batch_normalized_layer, value])
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = Add()([batch_normalized_layer, value])
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = Add()([batch_normalized_layer, value])
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = Add()([batch_normalized_layer, value])
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = Add()([batch_normalized_layer, value])
+
+
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(16, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first")(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    pooling_layer = AveragePooling2D((3, 3), (2, 2), padding='same', data_format="channels_first")(batch_normalized_layer)
+    side_value = Conv2D(16, data_format="channels_first", kernel_size=(1, 1), strides=(2, 2), padding='same')(value)
+    side_value = BatchNormalization()(side_value)
+    value = Add()([pooling_layer, side_value])
+
+
+    convolution_layer = Conv2D(64, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(64, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first")(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    pooling_layer = AveragePooling2D((3, 3), (2, 2), padding='same', data_format="channels_first")(batch_normalized_layer)
+    side_value = Conv2D(64, data_format="channels_first", kernel_size=(1, 1), strides=(2, 2), padding='same')(value)
+    side_value = BatchNormalization()(side_value)
+    value = Add()([pooling_layer, side_value])
+
+
+    convolution_layer = Conv2D(128, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(128, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first")(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    pooling_layer = AveragePooling2D((3, 3), (2, 2), padding='same', data_format="channels_first")(batch_normalized_layer)
+    side_value = Conv2D(128, data_format="channels_first", kernel_size=(1, 1), strides=(2, 2), padding='same')(value)
+    side_value = BatchNormalization()(side_value)
+    value = Add()([pooling_layer, side_value])
+
+
+    convolution_layer = Conv2D(256, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(256, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first")(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    pooling_layer = AveragePooling2D((3, 3), (2, 2), padding='same', data_format="channels_first")(batch_normalized_layer)
+    side_value = Conv2D(256, data_format="channels_first", kernel_size=(1, 1), strides=(2, 2), padding='same')(value)
+    side_value = BatchNormalization()(side_value)
+    value = Add()([pooling_layer, side_value])
+
+
+    convolution_layer = Conv2D(512, kernel_size=(3, 3), padding='same', kernel_initializer='random_normal', data_format="channels_first", input_shape=(1, 256, 256))(value)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    activation_layer = ReLU()(batch_normalized_layer)
+    convolution_layer = Conv2D(512, data_format="channels_first", kernel_size=(3, 3), padding='same',
+                               kernel_initializer='random_normal')(activation_layer)
+    batch_normalized_layer = BatchNormalization()(convolution_layer)
+    value = GlobalAveragePooling2D(data_format="channels_first")(batch_normalized_layer)
+
+    value = Dense(512, activation='relu')(value)
+
+    output = Dense(2, activation='softmax')(value)
+    # print("SUMMARY")
+    network = Model(inputs=input_value, outputs=output)
+    # network.summary()
+    # print("SUMMARY")
+    opt = RMSprop(lr=0.1, rho=0.9, epsilon=None, decay=0.0)
+    # opt = Adamax(lr=0.1, beta_1=0.9, beta_2=0.999, epsilon=None, decay=0.0)
+    network.compile(optimizer=opt,
+                    loss='binary_crossentropy',
                     metrics=['accuracy'])
     print('Network Compiled')
     return network
