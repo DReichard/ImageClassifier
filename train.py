@@ -1,20 +1,12 @@
 import glob
 
-from keras import models
-from keras import layers
 import numpy as np
-from keras.callbacks import LambdaCallback
 from keras.utils import np_utils
-from matplotlib.pyplot import imshow
 from skimage.util import view_as_blocks
 from sklearn.model_selection import train_test_split
 
-import image_parsing
-import prepare_dataset
-import rdn_assembly
-import matplotlib as plt
-from PIL import Image
-from scipy import misc, ndimage, signal
+from assembling_scripts import rdn_assembly
+from scipy import misc
 
 clean_path = 'D:\\nir_datasets\\jpg\\clean\\clean_cut_images2\\*'
 affected_path = 'D:\\nir_datasets\\jpg\\affected\\sorted\\vsl_lsb_5kb\\2019-03-17-15-04-40-207\\input000\\*';

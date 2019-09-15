@@ -41,7 +41,7 @@ ep = 1
 i = 0
 while True:
     i += ep
-    network.fit_generator(train_generator, epochs=ep, steps_per_epoch=train_epoch_size, validation_data=test_generator, validation_steps=test_epoch_size, verbose=2)
+    network.fit_generator(train_generator, epochs=ep, steps_per_epoch=train_epoch_size, validation_data=test_generator, validation_steps=test_epoch_size, verbose=1)
     open("../models/yedroudj/model_yedroudj_"+str(i)+".json", 'w').write(network.to_json())
     network.save_weights("../models/yedroudj/model_yedroudj_"+str(i)+".h5")
     network.save("../models/yedroudj/model_yedroudj_"+str(i)+"full.h5")

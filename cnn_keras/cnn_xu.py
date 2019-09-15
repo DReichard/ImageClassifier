@@ -1,14 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-"""
-Network presented in the paper:
-    Structural Design of Convolutional Neural Networks for Steganalysis.
-    Xu, Guanshuo and  Wu, Han-Zhou and Shi, Yun-Qing.
-    IEEE Signal Processing Letters, vol. 23, issue 5, pp. 708-712. 05/2016.
-"""
-
-
 import sys
 import glob
 
@@ -31,28 +20,28 @@ from keras.utils import np_utils
 from keras.layers.normalization import BatchNormalization
 from keras import backend as K
 
-
-def magic_spell():
-    # magic
-    import tensorflow as tf
-    from keras.backend.tensorflow_backend import set_session
-
-    config = tf.ConfigProto(
-        gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
-        # device_count = {'GPU': 1}
-    )
-    config.gpu_options.allow_growth = True
-    session = tf.Session(config=config)
-    set_session(session)
+#
+# def magic_spell():
+#     # magic
+#     import tensorflow as tf
+#     from keras.backend.tensorflow_backend import set_session
+#
+#     config = tf.ConfigProto(
+#       gpu_options = tf.GPUOptions(per_process_gpu_memory_fraction=0.8)
+#       # device_count = {'GPU': 1}
+#     )
+#     config.gpu_options.allow_growth = True
+#     session = tf.Session(config=config)
+#     set_session(session)
 
 
 def load_images(path_pattern):
     # Crop squared blocks of the image with size:
-    n = 256
+    n = 128
     files=glob.glob(path_pattern)
     X=[]
     indx = 0
-    for f in files[0:15000]:
+    for f in files[0:10000]:
         I = misc.imread(f)
         indx = indx + 1
         if indx % 1000 == 0:
@@ -65,15 +54,18 @@ def load_images(path_pattern):
     X=numpy.array(X)
     return X
 
-
+train_cover_path = r"C:\datasets\j-uniward_128_2020\train\cover"
+train_stego_path = r"C:\datasets\j-uniward_128_2020\train\stego"
+test_cover_path = r"C:\datasets\j-uniward_128_2020\test\cover"
+test_stego_path = r"C:\datasets\j-uniward_128_2020\test\stego"
 print("Loading cover")
-Xc = load_images('D:\\nir_datasets\\jpg\\clean\\memes\\memes_train\\*')
+Xc = load_images(train_cover_path + r"\*")
 print("Loading affected")
-Xs = load_images('D:\\nir_datasets\\jpg\\affected\\sorted\\memes_5kb\\train\\*')
+Xs = load_images(train_stego_path + r"\*")
 print("Loading validation cover")
-Yc = load_images('D:\\nir_datasets\\jpg\\clean\\memes\\memes_test\\*')
+Yc = load_images(test_cover_path + r"\*")
 print("Loading validation affected")
-Ys = load_images('D:\\nir_datasets\\jpg\\affected\\sorted\\memes_5kb\\test\\*')
+Ys = load_images(test_stego_path + r"\*")
 print("Images loaded")
 X = numpy.vstack((Xc, Xs))
 Y = numpy.vstack((Yc, Ys))
@@ -95,7 +87,7 @@ Xt=Xt[idx]
 def assemble_network():
     print("Assembling start")
     model = Sequential()
-    n = 256
+    n = 128
     F0 = numpy.array(
        [[-1,  2,  -2,  2, -1],
         [ 2, -6,   8, -6,  2],
@@ -104,7 +96,6 @@ def assemble_network():
         [-1,  2,  -2,  2, -1]])
     F = numpy.reshape(F0, (F0.shape[0],F0.shape[1],1,1) )
     bias=numpy.array([0])
-    # print(F.shape)
 
     model.add(Conv2D(1, (5,5), padding="same", data_format="channels_first", input_shape=(1,n,n), activation='relu', weights=[F, bias]))
 

@@ -81,7 +81,7 @@ if __name__ == '__main__':
     # random.shuffle(idx)
 
     Y = Y[idx]
-    Y2 = Y2[idx]/255
+    Y2 = Y2[idx]
     Yt = Yt[idx]
     Yt2 = Yt2[idx]
 
@@ -114,6 +114,6 @@ if __name__ == '__main__':
     # plt.plot(fpr_rs, tpr_rs, label='RS-модуль (AUC = {:.3f})'.format(auc_rs))
     plt.xlabel('False positive rate')
     plt.ylabel('True positive rate')
-    plt.title('ROC (S-UNIWARD @ various densities)')
+    plt.title('ROC (S-UNIWARD @ 2 densities)')
     plt.legend(loc='best')
     plt.show()

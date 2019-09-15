@@ -1,5 +1,6 @@
 import os
 import random
+import threading
 from itertools import chain, islice
 
 import numpy as np
@@ -18,16 +19,15 @@ def load_image(path, image_size):
     return I
 
 
-def pair_generator_internal(cover_root, stego_root, image_size):
+def pair_generator_internal(cover_root, stego_root, image_size, set_size, do_shuffle):
+    cover_paths = np.array(sorted(os.listdir(cover_root))[:set_size])
+    stego_paths = np.array(sorted(os.listdir(stego_root))[:set_size])
+    inner = np.array(list(set(cover_paths) & set(stego_paths)))
+    indices = np.arange(inner.shape[0])
+    print(inner[0] + "\n --- \n" + inner[-1])
     while True:
-        print("Dataset cycled through")
-        cover_paths = np.array(os.listdir(cover_root))
-        stego_paths = np.array(os.listdir(stego_root))
-        if len(cover_paths) != len(stego_paths):
-            print("Cover and stego dir lengths do not match")
-        inner = np.array(list(set(cover_paths) & set(stego_paths)))
-        indices = np.arange(inner.shape[0])
-        np.random.shuffle(indices)
+        if do_shuffle:
+            np.random.shuffle(indices)
 
         inner = inner[indices]
 
@@ -53,8 +53,8 @@ def pair_generator_internal(cover_root, stego_root, image_size):
             yield (x, y)
 
 
-def pair_generator(cover_path, stego_path, image_size, batch_size):
-    iterable = pair_generator_internal(cover_path, stego_path, image_size)
+def pair_generator(cover_path, stego_path, image_size, batch_size, set_size, do_shuffle):
+    iterable = pair_generator_internal(cover_path, stego_path, image_size, set_size, do_shuffle)
     iterator = iter(iterable)
     for first in iterator:
         records_batch = chain([first], islice(iterator, batch_size - 1))

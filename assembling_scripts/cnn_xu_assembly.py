@@ -1,9 +1,9 @@
-import keras
+import keras as K
+from keras import *
 import numpy
-from keras import Sequential
-from keras.layers import Conv2D, BatchNormalization, Lambda, Activation, AveragePooling2D, GlobalAveragePooling2D, \
-    Dense, K
-import tensorflow as tf
+from keras.layers import Conv2D, Dense, GlobalAveragePooling2D, Activation, BatchNormalization, AveragePooling2D, Lambda
+from keras.optimizers import Adam
+
 from assembling_scripts.srm_matrices import get_kernels
 from keras.utils.conv_utils import convert_kernel
 
@@ -26,7 +26,7 @@ def assemble_network_xu(n):
 
     model.add(Conv2D(8, (5,5), padding="same", data_format="channels_first"))
     model.add(BatchNormalization())
-    model.add(Lambda(lambda x: K.abs(x)))
+    model.add(Lambda(lambda x: K.backend.abs(x)))
     model.add(Activation("tanh"))
 
     model.add(AveragePooling2D(pool_size=(5, 5), strides=2, padding="same", data_format="channels_first"))
@@ -57,7 +57,7 @@ def assemble_network_xu(n):
 
     model.add(Dense(2))
     model.add(Activation('softmax'))
-    opt = keras.optimizers.Adam(lr=0.004, decay=0.000002, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
+    opt = Adam(lr=0.004, decay=0.000002, beta_1=0.9, beta_2=0.999, epsilon=None, amsgrad=False)
     model.compile(loss='binary_crossentropy', optimizer=opt, metrics=['accuracy'], )
     print("Assembly done")
     return model
