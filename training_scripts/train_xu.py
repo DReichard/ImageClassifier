@@ -8,6 +8,8 @@ from assembling_scripts.cnn_xu_assembly import assemble_network_xu
 from assembling_scripts.cnn_xu_mod_assembly import assemble_network_xu_mod
 from assembling_scripts.rdn_assembly import get_network
 from training_scripts.batch_generator import pair_generator
+import json
+from keras import backend as KB
 
 
 def load_images(path_pattern):
@@ -46,10 +48,10 @@ test_stego_path = r"C:\datasets\j-uniward_128_2020\test\stego"
 
 
 image_size = 128
-batch_size = 32
-train_set_size = 20000
+batch_size = 30
+train_set_size = 30000
 test_set_size = 500
-lr_epoch_threshold = 50
+lr_epoch_threshold = 400
 lr_old_val = 0.001
 lr_new_val = 0.0001
 
@@ -72,9 +74,11 @@ ep = 1
 i = 0
 # #
 # from keras.models import load_model
-# network = load_model('../models/model_xu_352full.h5')
-# i = 352
-
+# network = load_model('../models/model_xu_2020_j_' + str(i) + 'full.h5')
+history_tr_acc = []
+history_val_acc = []
+history_tr_loss = []
+history_val_loss = []
 while True:
     i += ep
     print(str(i))
@@ -85,7 +89,7 @@ while True:
         validation_data=test_generator,
         validation_steps=test_epoch_size,
         callbacks=[change_lr],
-        verbose=1)
+        verbose=2)
 
     open("../models/model_xu_2020_j_"+str(i)+".json", 'w').write(network.to_json())
     network.save_weights("../models/model_xu_2020_j_"+str(i)+".h5")
@@ -94,11 +98,43 @@ while True:
     # onnxmltools.utils.save_text(onnx_model, '../models/model_xu_' + str(i) + '_onnx.json')
     # onnxmltools.utils.save_model(onnx_model, '../models/model_xu_' + str(i) + '_onnx.onnx')
 
+    history_tr_acc.append(history.history['acc'])
+    history_val_acc.append(history.history['val_acc'])
+    history_tr_loss.append(history.history['loss'])
+    history_val_loss.append(history.history['val_loss'])
 
-# xunet, j-uniward 128px, загрузка 1.0
-# 220 брать
-# 262 брать
-# 334
-# 366
-# network.evaluate_generator(test_generator)
+    file = '../models/tr_acc2.json'
+    with open(file, 'w') as filetowrite:
+        filetowrite.write(json.dumps(history_tr_acc))
+    file = '../models/val_acc2.json'
+    with open(file, 'w') as filetowrite:
+        filetowrite.write(json.dumps(history_val_acc))
+    file = '../models/tr_loss2.json'
+    with open(file, 'w') as filetowrite:
+        filetowrite.write(json.dumps(history_tr_loss))
+    file = '../models/val_loss2.json'
+    with open(file, 'w') as filetowrite:
+        filetowrite.write(json.dumps(history_val_loss))
+
+    import matplotlib.pyplot as plt
+    # Plot training & validation accuracy values
+    plt.plot(history_tr_acc)
+    plt.plot(history_val_acc)
+    plt.title('Model accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left')
+    plt.show()
+    # Plot training & validation loss values
+    plt.plot(history_tr_loss)
+    plt.plot(history_val_loss)
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend(['Train', 'Test'], loc='upper left')
+    plt.show()
+    KB.clear_session()
+
+
+#13 норм
 

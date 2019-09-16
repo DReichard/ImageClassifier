@@ -65,6 +65,7 @@ def type_4_layer(x, n):
     x = GlobalAveragePooling2D(data_format="channels_first")(x)
     return x
 
+
 def assemble_network_xu_mod(n):
     print("Assembling start")
 
@@ -75,17 +76,16 @@ def assemble_network_xu_mod(n):
     x = type_2_layer(x, 16)
     x = type_2_layer(x, 16)
     x = type_2_layer(x, 16)
+    x = type_2_layer(x, 16)
+    x = type_2_layer(x, 16)
 
     x = type_3_layer(x, 16)
     x = type_3_layer(x, 64)
+    x = type_3_layer(x, 128)
 
-    # x = AveragePooling2D(pool_size=(5, 5), strides=2, padding="same", data_format="channels_first")(x)
-    # x = type_1_layer(x, 128)
-    #
-    # x = GlobalAveragePooling2D(data_format="channels_first")(x)
-    x = type_4_layer(x, 128)
+    x = type_4_layer(x, 256)
 
-    x = Dense(128, activation='relu')(x)
+    x = Dense(256, activation='relu')(x)
     x = Dense(2)(x)
     out = Activation('softmax')(x)
     network = Model(inputs=input_value, outputs=out)
