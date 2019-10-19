@@ -69,7 +69,7 @@ def type_4_layer(x, n):
 def assemble_network_xu_mod(n):
     print("Assembling start")
 
-    input_value = Input(shape=(1, 128, 128))
+    input_value = Input(shape=(1, 128, 128), dtype="float32")
     x = type_1_layer(input_value, 64)
     x = type_1_layer(x, 16)
 

@@ -1,6 +1,5 @@
 import glob
 
-from keras.utils import np_utils
 from scipy import misc
 import numpy
 import random
@@ -43,7 +42,7 @@ if __name__ == '__main__':
     KB.clear_session()
     print("Loading model")
     from keras.models import load_model
-    network = load_model(r'C:\Users\stani\PycharmProjects\ImageClassifier\models\model_xu_2020_j_10full.h5')
+    network = load_model(r'C:\Users\stani\PycharmProjects\ImageClassifier\models\model_xu_2020_j_72full.h5')
     test_cover_path = r"C:\datasets\j-uniward_128\test\cover\*"
     test_stego_path = r"C:\datasets\j-uniward_128\test\stego_3_0\*"
     image_size = 128

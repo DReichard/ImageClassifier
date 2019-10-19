@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 from numpy import array, int32
 
 
@@ -9,7 +10,8 @@ def pgmread(filename):
   Line2 : Width Height
   Line3 : Max Gray level
   Lines starting with # are ignored """
-    f = cv2.imread(filename, 0)
+    img = cv2.imread(filename, 0)
+    f = np.float32(img)
     return array(f)
 
 
